@@ -15,7 +15,5 @@
         }
     ],
     "serverSideOnly" : false
-    "isGameplay" : "true",
-    "defaultWorldGenerator" : "GooeyDefence:gooeyDefenceField"
 }
 
