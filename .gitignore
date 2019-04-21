@@ -11,6 +11,3 @@ build.gradle
 .settings
 bin/
 build/
-
-#Other
-.ahcn
