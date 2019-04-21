@@ -16,10 +16,10 @@
 package org.terasology.flexiblemovement.node;
 
 import org.terasology.flexiblemovement.FlexibleMovementComponent;
-import org.terasology.logic.behavior.tree.DecoratorNode;
-import org.terasology.logic.behavior.tree.Node;
-import org.terasology.logic.behavior.tree.Status;
-import org.terasology.logic.behavior.tree.Task;
+//import org.terasology.logic.behavior.tree.DecoratorNode;
+//import org.terasology.logic.behavior.tree.Node;
+//import org.terasology.logic.behavior.tree.Status;
+//import org.terasology.logic.behavior.tree.Task;
 import org.terasology.math.geom.Vector3i;
 
 /**
@@ -31,45 +31,48 @@ import org.terasology.math.geom.Vector3i;
  * 4. On child FAILURE, returns FAILURE
  * 5. When end of path is reached, returns SUCCESS
  */
-public class MoveAlongPathNode extends DecoratorNode {
-    @Override
-    public MoveAlongPathTask createTask() {
-        return new MoveAlongPathTask(this);
-    }
+public class MoveAlongPathNode {
 
-    public class MoveAlongPathTask extends Task {
-        protected MoveAlongPathTask(Node node) {
-            super(node);
-        }
-
-        @Override
-        public void onInitialize() {
-            start(getChild());
-        }
-
-        @Override
-        public Status update(float dt) {
-            return Status.RUNNING;
-        }
-
-        @Override
-        public void handle(Status result) {
-            FlexibleMovementComponent movement = actor().getComponent(FlexibleMovementComponent.class);
-            if(result == Status.SUCCESS) {
-                movement.advancePath();
-                if(movement.isPathFinished()) {
-                    movement.resetPath();
-                    stop(Status.SUCCESS);
-                } else {
-                    start(getChild());
-                }
-            }
-
-            if(result == Status.FAILURE) {
-                stop(Status.FAILURE);
-            }
-
-            actor().save(movement);
-        }
-    }
 }
+//public class MoveAlongPathNode extends DecoratorNode {
+//    @Override
+//    public MoveAlongPathTask createTask() {
+//        return new MoveAlongPathTask(this);
+//    }
+//
+//    public class MoveAlongPathTask extends Task {
+//        protected MoveAlongPathTask(Node node) {
+//            super(node);
+//        }
+//
+//        @Override
+//        public void onInitialize() {
+//            start(getChild());
+//        }
+//
+//        @Override
+//        public Status update(float dt) {
+//            return Status.RUNNING;
+//        }
+//
+//        @Override
+//        public void handle(Status result) {
+//            FlexibleMovementComponent movement = actor().getComponent(FlexibleMovementComponent.class);
+//            if(result == Status.SUCCESS) {
+//                movement.advancePath();
+//                if(movement.isPathFinished()) {
+//                    movement.resetPath();
+//                    stop(Status.SUCCESS);
+//                } else {
+//                    start(getChild());
+//                }
+//            }
+//
+//            if(result == Status.FAILURE) {
+//                stop(Status.FAILURE);
+//            }
+//
+//            actor().save(movement);
+//        }
+//    }
+//}

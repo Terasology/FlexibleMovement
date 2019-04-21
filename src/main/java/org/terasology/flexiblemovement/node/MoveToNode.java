@@ -24,9 +24,9 @@ import org.terasology.flexiblemovement.plugin.WalkingMovementPlugin;
 import org.terasology.flexiblemovement.system.FlexibleMovementSystem;
 import org.terasology.flexiblemovement.system.PluginSystem;
 import org.terasology.flexiblemovement.plugin.MovementPlugin;
-import org.terasology.logic.behavior.tree.Node;
-import org.terasology.logic.behavior.tree.Status;
-import org.terasology.logic.behavior.tree.Task;
+//import org.terasology.logic.behavior.tree.Node;
+//import org.terasology.logic.behavior.tree.Status;
+//import org.terasology.logic.behavior.tree.Task;
 import org.terasology.logic.characters.CharacterMoveInputEvent;
 import org.terasology.logic.characters.CharacterMovementComponent;
 import org.terasology.logic.location.LocationComponent;
@@ -40,78 +40,81 @@ import org.terasology.world.WorldProvider;
  * SUCCESS: When the actor reaches FlexibleMovementComponent.target
  * FAILURE: When the actor believes it is unable to reach its immediate target
  */
-public class MoveToNode extends Node {
-    static final private Logger logger = LoggerFactory.getLogger(MoveToNodeTask.class);
+public class MoveToNode {
 
-    @Override
-    public MoveToNodeTask createTask() {
-        return new MoveToNodeTask(this);
-    }
-
-    public class MoveToNodeTask extends Task {
-        @In private Time time;
-        @In private WorldProvider world;
-        @In private FlexibleMovementSystem flexibleMovementSystem;
-        @In private PluginSystem pluginSystem;
-
-        public MoveToNodeTask(Node node) {
-            super(node);
-        }
-
-        @Override
-        public Status update(float dt) {
-            LocationComponent location = actor().getComponent(LocationComponent.class);
-            FlexibleMovementComponent flexibleMovementComponent = actor().getComponent(FlexibleMovementComponent.class);
-            CharacterMovementComponent characterMovementComponent = actor().getComponent(CharacterMovementComponent.class);
-
-            // we need to translate the movement target to an expected real world position
-            // in practice we just need to adjust the Y so that it's resting on top of the block at the right height
-            Vector3f adjustedMoveTarget = flexibleMovementComponent.target.toVector3f();
-
-            // this is the result of experimentation and some penwork
-//            float adjustedY = (float) Math.ceil(adjustedMoveTarget.y - halfHeight) + halfHeight - 0.5f;
-//            adjustedMoveTarget.setY(adjustedY);
-
-            Vector3f position = location.getWorldPosition();
-            if (position.distance(adjustedMoveTarget) <= flexibleMovementComponent.targetTolerance) {
-                return Status.SUCCESS;
-            }
-
-            flexibleMovementComponent.sequenceNumber++;
-            MovementPlugin plugin = pluginSystem.getMovementPlugin(actor().getEntity());
-            CharacterMoveInputEvent result = plugin.move(
-                    actor().getEntity(),
-                    adjustedMoveTarget,
-                    flexibleMovementComponent.sequenceNumber
-            );
-
-            if (result == null) {
-                // this is ugly, but due to unknown idiosyncrasies in the engine character movement code, characters
-                // sometimes sink into solid blocks below them. This causes reachability checks to fail intermittently,
-                // especially when characters stop moving. In an ideal world, we'd exit failure here to indicate our
-                // path is no longer valid. However, we instead fall back to a default movement plugin in the hopes
-                // that a gentle nudge in a probably-correct direction will at least make the physics reconcile the
-                // intersection, and hopefully return to properly penetrable blocks.
-                logger.debug("Movement plugin returned null");
-                MovementPlugin fallbackPlugin = new WalkingMovementPlugin(world, time);
-                result = fallbackPlugin.move(
-                        actor().getEntity(),
-                        adjustedMoveTarget,
-                        flexibleMovementComponent.sequenceNumber
-                );
-            }
-
-            actor().getEntity().send(result);
-            flexibleMovementComponent.lastInput = time.getGameTimeInMs();
-            flexibleMovementComponent.collidedHorizontally = false;
-            actor().save(flexibleMovementComponent);
-
-            return Status.RUNNING;
-        }
-
-        @Override
-        public void handle(Status result) {
-
-        }
-    }
 }
+//public class MoveToNode extends Node {
+//    static final private Logger logger = LoggerFactory.getLogger(MoveToNodeTask.class);
+//
+//    @Override
+//    public MoveToNodeTask createTask() {
+//        return new MoveToNodeTask(this);
+//    }
+//
+//    public class MoveToNodeTask extends Task {
+//        @In private Time time;
+//        @In private WorldProvider world;
+//        @In private FlexibleMovementSystem flexibleMovementSystem;
+//        @In private PluginSystem pluginSystem;
+//
+//        public MoveToNodeTask(Node node) {
+//            super(node);
+//        }
+//
+//        @Override
+//        public Status update(float dt) {
+//            LocationComponent location = actor().getComponent(LocationComponent.class);
+//            FlexibleMovementComponent flexibleMovementComponent = actor().getComponent(FlexibleMovementComponent.class);
+//            CharacterMovementComponent characterMovementComponent = actor().getComponent(CharacterMovementComponent.class);
+//
+//            // we need to translate the movement target to an expected real world position
+//            // in practice we just need to adjust the Y so that it's resting on top of the block at the right height
+//            Vector3f adjustedMoveTarget = flexibleMovementComponent.target.toVector3f();
+//
+//            // this is the result of experimentation and some penwork
+////            float adjustedY = (float) Math.ceil(adjustedMoveTarget.y - halfHeight) + halfHeight - 0.5f;
+////            adjustedMoveTarget.setY(adjustedY);
+//
+//            Vector3f position = location.getWorldPosition();
+//            if (position.distance(adjustedMoveTarget) <= flexibleMovementComponent.targetTolerance) {
+//                return Status.SUCCESS;
+//            }
+//
+//            flexibleMovementComponent.sequenceNumber++;
+//            MovementPlugin plugin = pluginSystem.getMovementPlugin(actor().getEntity());
+//            CharacterMoveInputEvent result = plugin.move(
+//                    actor().getEntity(),
+//                    adjustedMoveTarget,
+//                    flexibleMovementComponent.sequenceNumber
+//            );
+//
+//            if (result == null) {
+//                // this is ugly, but due to unknown idiosyncrasies in the engine character movement code, characters
+//                // sometimes sink into solid blocks below them. This causes reachability checks to fail intermittently,
+//                // especially when characters stop moving. In an ideal world, we'd exit failure here to indicate our
+//                // path is no longer valid. However, we instead fall back to a default movement plugin in the hopes
+//                // that a gentle nudge in a probably-correct direction will at least make the physics reconcile the
+//                // intersection, and hopefully return to properly penetrable blocks.
+//                logger.debug("Movement plugin returned null");
+//                MovementPlugin fallbackPlugin = new WalkingMovementPlugin(world, time);
+//                result = fallbackPlugin.move(
+//                        actor().getEntity(),
+//                        adjustedMoveTarget,
+//                        flexibleMovementComponent.sequenceNumber
+//                );
+//            }
+//
+//            actor().getEntity().send(result);
+//            flexibleMovementComponent.lastInput = time.getGameTimeInMs();
+//            flexibleMovementComponent.collidedHorizontally = false;
+//            actor().save(flexibleMovementComponent);
+//
+//            return Status.RUNNING;
+//        }
+//
+//        @Override
+//        public void handle(Status result) {
+//
+//        }
+//    }
+//}
